@@ -1,4 +1,5 @@
-package co.edu.uniquindio.demop2pf.model;
+package co.edu.uniquindio.poo.model;
+
 
 import java.util.ArrayList;
 import java.util.List;

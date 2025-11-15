@@ -1,6 +1,6 @@
-package co.edu.uniquindio.demop2pf.model;
+package co.edu.uniquindio.poo.model;
 
-import co.edu.uniquindio.demop2pf.strategy.EstrategiaPago;
+import co.edu.uniquindio.poo.strategy.EstrategiaPago;
 
 /**
  * Modelo de Método de Pago.
