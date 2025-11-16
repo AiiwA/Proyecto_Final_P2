@@ -108,7 +108,7 @@ public class Envio extends Subject {
     private LocalDateTime fechaEntregaEstimada;
     
     /** Objeto de estado que maneja las transiciones de estado (patrón State) */
-    private co.edu.uniquindio.demop2pf.state.EstadoEnvio estadoActual;
+    private co.edu.uniquindio.poo.state.EstadoEnvio estadoActual;
     
     /**
      * Tipos de envío disponibles con tarifas diferenciadas
@@ -158,7 +158,7 @@ public class Envio extends Subject {
      * 
      * @param nuevoEstado Nuevo objeto de estado a aplicar
      */
-    public void setEstadoActual(co.edu.uniquindio.demop2pf.state.EstadoEnvio nuevoEstado) {
+    public void setEstadoActual(co.edu.uniquindio.poo.state.EstadoEnvio nuevoEstado) {
         this.estadoActual = nuevoEstado;
         notificarObservadores("Estado del envío cambiado a: " + nuevoEstado.getNombre(), this);
     }
