@@ -40,7 +40,7 @@ public class ReporteUsuarios extends Reporte {
         }
         
         generarEstructura("REPORTE DE USUARIOS", contenido.toString(), 
-                         "Sistema de Gestión de Envíos © 2025");
+                         "CityDrop © 2025");
         formato.guardarArchivo(nombreArchivo);
     }
 }

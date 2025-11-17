@@ -11,11 +11,10 @@ public class DataInitializer {
         AdminController adminController = new AdminController();
         EnvioController envioController = new EnvioController();
         
-        // Verificar si ya hay datos inicializados
-        if (!usuarioController.obtenerTodosUsuarios().isEmpty()) {
-            System.out.println("✓ Datos de prueba ya están inicializados");
-            return;
-        }
+         if (!usuarioController.obtenerTodosUsuarios().isEmpty()) {
+             System.out.println("✓ Datos de prueba ya están inicializados");
+             return;
+         }
         
         // Crear usuarios de prueba
         Usuario usuario1 = usuarioController.registrarUsuario(
@@ -34,7 +33,7 @@ public class DataInitializer {
         
         // Crear administrador
         adminController.registrarAdministrador(
-            "Admin Sistema", 
+            "Administrador", 
             "admin@sistema.com", 
             "admin123"
         );
