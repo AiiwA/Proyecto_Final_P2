@@ -27,7 +27,7 @@ public class NavigationController {
     
     public static void navigateTo(String fxmlFile, String title) {
         try {
-            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource(fxmlFile));
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/co/edu/uniquindio/demop2pf/" + fxmlFile));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.edu.uniquindio.poo.viewController.MapaSelectorViewController"
+            prefHeight="700.0" prefWidth="1000.0">
+    
+    <VBox spacing="0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #4CAF50; -fx-padding: 15;">
+            <Label text="Selecciona una ubicación en el mapa" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="20.0"/>
+                </font>
+            </Label>
+        </HBox>
+        
+        <!-- Mapa WebView -->
+        <WebView fx:id="mapaWebView" VBox.vgrow="ALWAYS"/>
+        
+        <!-- Footer con controles -->
+        <VBox spacing="10.0" style="-fx-background-color: white; -fx-padding: 15; -fx-border-color: #ddd; -fx-border-width: 1 0 0 0;">
+            
+            <GridPane hgap="15.0" vgap="10.0">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" prefWidth="200.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" prefWidth="200.0"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                
+                <Label text="Latitud:" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <font><Font name="System Bold" size="14.0"/></font>
+                </Label>
+                <TextField fx:id="latitudField" promptText="Ej: 4.534" 
+                         GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                
+                <Label text="Longitud:" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <font><Font name="System Bold" size="14.0"/></font>
+                </Label>
+                <TextField fx:id="longitudField" promptText="Ej: -75.681" 
+                         GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                
+                <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.rowSpan="2">
+                    <Label text="Instrucciones:" style="-fx-text-fill: #666;">
+                        <font><Font size="12.0" name="System Bold"/></font>
+                    </Label>
+                    <Label text="1. Haz clic en el mapa" style="-fx-text-fill: #999; -fx-font-size: 11;">
+                        <font><Font size="11.0"/></font>
+                    </Label>
+                    <Label text="2. Las coordenadas se actualizan automáticamente" style="-fx-text-fill: #999; -fx-font-size: 11;">
+                        <font><Font size="11.0"/></font>
+                    </Label>
+                    <Label text="3. Presiona Confirmar para continuar" style="-fx-text-fill: #4CAF50; -fx-font-size: 11; -fx-font-weight: bold;">
+                        <font><Font size="11.0"/></font>
+                    </Label>
+                </VBox>
+            </GridPane>
+            
+            <!-- Botones de acción -->
+            <HBox spacing="15.0" alignment="CENTER_RIGHT">
+                <Button fx:id="cancelarButton" text="Cancelar" 
+                        style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 30;"
+                        prefWidth="150.0">
+                    <font><Font name="System Bold" size="14.0"/></font>
+                </Button>
+                <Button fx:id="confirmarButton" text="Confirmar Ubicación" 
+                        style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 30;"
+                        prefWidth="200.0">
+                    <font><Font name="System Bold" size="14.0"/></font>
+                </Button>
+            </HBox>
+            
+        </VBox>
+        
+    </VBox>
+    
+</AnchorPane>

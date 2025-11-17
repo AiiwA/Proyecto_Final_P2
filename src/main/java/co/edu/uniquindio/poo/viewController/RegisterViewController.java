@@ -1,7 +1,6 @@
 package co.edu.uniquindio.poo.viewController;
 
 import co.edu.uniquindio.poo.controller.UsuarioController;
-import co.edu.uniquindio.poo.model.Usuario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -52,7 +51,7 @@ public class RegisterViewController {
         }
         
         try {
-            Usuario nuevoUsuario = usuarioController.registrarUsuario(nombre, correo, telefono, password);
+            usuarioController.registrarUsuario(nombre, correo, telefono, password);
             mostrarMensaje("¡Registro exitoso! Redirigiendo al login...", "success");
             
             // Esperar 2 segundos antes de navegar

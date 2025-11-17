@@ -1,8 +1,5 @@
 package co.edu.uniquindio.poo.model;
 
-
-import lombok.Getter;
-
 public class Tarifa {
     private double base;
     private double peso;

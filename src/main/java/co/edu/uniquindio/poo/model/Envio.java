@@ -3,8 +3,6 @@ package co.edu.uniquindio.poo.model;
 import java.time.LocalDateTime;
 
 import co.edu.uniquindio.poo.observer.Subject;
-import co.edu.uniquindio.poo.state.EstadoEnvio;
-import co.edu.uniquindio.poo.state.EstadoSolicitado;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

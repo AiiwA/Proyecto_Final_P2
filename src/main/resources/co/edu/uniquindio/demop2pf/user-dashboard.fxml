@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.edu.uniquindio.poo.viewController.UserDashboardViewController"
+            prefHeight="650.0" prefWidth="900.0" style="-fx-background-color: #f5f5f5;">
+    
+    <VBox spacing="10.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #2196F3; -fx-padding: 15;">
+            <Label fx:id="welcomeLabel" text="Dashboard Usuario" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="20.0"/>
+                </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Perfil" onAction="#handlePerfil" style="-fx-background-color: white; -fx-text-fill: #2196F3;"/>
+            <Button text="Cerrar Sesión" onAction="#handleLogout" style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
+        </HBox>
+        
+        <!-- Statistics Cards -->
+        <HBox spacing="15.0" alignment="CENTER" style="-fx-padding: 20;">
+            <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: white; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" prefWidth="250.0">
+                <Label text="Total Envíos" style="-fx-text-fill: #666;">
+                    <font><Font size="14.0"/></font>
+                </Label>
+                <Label fx:id="totalEnviosLabel" text="0" style="-fx-text-fill: #2196F3;">
+                    <font><Font name="System Bold" size="32.0"/></font>
+                </Label>
+            </VBox>
+            
+            <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: white; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" prefWidth="250.0">
+                <Label text="Envíos Activos" style="-fx-text-fill: #666;">
+                    <font><Font size="14.0"/></font>
+                </Label>
+                <Label fx:id="enviosActivosLabel" text="0" style="-fx-text-fill: #FF9800;">
+                    <font><Font name="System Bold" size="32.0"/></font>
+                </Label>
+            </VBox>
+            
+            <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: white; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);" prefWidth="250.0">
+                <Label text="Envíos Entregados" style="-fx-text-fill: #666;">
+                    <font><Font size="14.0"/></font>
+                </Label>
+                <Label fx:id="enviosEntregadosLabel" text="0" style="-fx-text-fill: #4CAF50;">
+                    <font><Font name="System Bold" size="32.0"/></font>
+                </Label>
+            </VBox>
+        </HBox>
+        
+        <!-- Actions Bar -->
+        <HBox spacing="15.0" alignment="CENTER_LEFT" style="-fx-padding: 0 20;">
+            <Button text="+ Nuevo Envío" onAction="#handleNuevoEnvio" 
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;">
+                <font><Font name="System Bold" size="14.0"/></font>
+            </Button>
+            <Label text="Filtrar por estado:">
+                <font><Font name="System Bold" size="14.0"/></font>
+            </Label>
+            <ComboBox fx:id="filtroEstadoCombo" prefWidth="150.0"/>
+            <Button text="Aplicar" onAction="#handleFiltrar" 
+                    style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-padding: 8;">
+            </Button>
+        </HBox>
+        
+        <!-- Table -->
+        <VBox VBox.vgrow="ALWAYS" style="-fx-padding: 0 20 20 20;">
+            <TableView fx:id="enviosTable" VBox.vgrow="ALWAYS" style="-fx-background-color: white;">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID Envío" prefWidth="200.0"/>
+                    <TableColumn fx:id="colOrigen" text="Origen" prefWidth="150.0"/>
+                    <TableColumn fx:id="colDestino" text="Destino" prefWidth="150.0"/>
+                    <TableColumn fx:id="colEstado" text="Estado" prefWidth="150.0"/>
+                    <TableColumn fx:id="colCosto" text="Costo" prefWidth="100.0"/>
+                </columns>
+            </TableView>
+        </VBox>
+        
+    </VBox>
+    
+</AnchorPane>
