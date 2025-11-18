@@ -93,6 +93,9 @@ public class Envio extends Subject {
     @NonNull
     private Usuario usuario;
     
+    /** Repartidor asignado al envío */
+    private Repartidor repartidor;
+    
     /** Costo total del envío en pesos */
     @Builder.Default
     private double costo = 0.0;

@@ -10,6 +10,7 @@ public class DataInitializer {
         UsuarioController usuarioController = new UsuarioController();
         AdminController adminController = new AdminController();
         EnvioController envioController = new EnvioController();
+        RepartidorController repartidorController = new RepartidorController();
         
          if (!usuarioController.obtenerTodosUsuarios().isEmpty()) {
              System.out.println("✓ Datos de prueba ya están inicializados");
@@ -84,6 +85,34 @@ public class DataInitializer {
             3.0, 40, 30, 20
         );
         
+        // Crear repartidores de prueba
+        Repartidor rep1 = repartidorController.registrarRepartidor(
+            "Carlos Ramírez",
+            "1234567890",
+            "3101234567",
+            "Armenia Centro",
+            Repartidor.EstadoRepartidor.ACTIVO
+        );
+        
+        repartidorController.registrarRepartidor(
+            "Laura Martínez",
+            "0987654321",
+            "3159876543",
+            "Calarcá",
+            Repartidor.EstadoRepartidor.ACTIVO
+        );
+        
+        repartidorController.registrarRepartidor(
+            "Diego Silva",
+            "1122334455",
+            "3201237890",
+            "Armenia Norte",
+            Repartidor.EstadoRepartidor.INACTIVO
+        );
+        
+        // Asignar repartidores a algunos envíos
+        adminController.asignarRepartidorAEnvio(envio1.getIdEnvio(), rep1.getIdRepartidor());
+        
         // Cambiar algunos estados
         envioController.iniciarEntrega(envio1.getIdEnvio());
         
@@ -91,5 +120,6 @@ public class DataInitializer {
         System.out.println("  - Usuarios creados: 2");
         System.out.println("  - Admin: admin@sistema.com / admin123");
         System.out.println("  - Envíos creados: 3");
+        System.out.println("  - Repartidores creados: 3");
     }
 }

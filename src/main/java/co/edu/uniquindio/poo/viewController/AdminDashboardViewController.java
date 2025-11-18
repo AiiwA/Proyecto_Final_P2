@@ -43,6 +43,27 @@ public class AdminDashboardViewController {
     @FXML private TableColumn<Envio, String> colEnvioEstado;
     @FXML private TableColumn<Envio, Double> colEnvioCosto;
     
+    // Tabla de Repartidores
+    @FXML private TableView<Repartidor> repartidoresTable;
+    @FXML private TableColumn<Repartidor, String> colRepartidorId;
+    @FXML private TableColumn<Repartidor, String> colRepartidorNombre;
+    @FXML private TableColumn<Repartidor, String> colRepartidorDocumento;
+    @FXML private TableColumn<Repartidor, String> colRepartidorTelefono;
+    @FXML private TableColumn<Repartidor, String> colRepartidorZonaCobertura;
+    @FXML private TableColumn<Repartidor, String> colRepartidorEstado;
+    @FXML private TableColumn<Repartidor, Integer> colRepartidorEnvios;
+    
+    // Campos de formulario de repartidor
+    @FXML private TextField nombreRepartidorField;
+    @FXML private TextField documentoRepartidorField;
+    @FXML private TextField telefonoRepartidorField;
+    @FXML private TextField zonaCoberturaRepartidorField;
+    @FXML private ComboBox<String> estadoRepartidorCombo;
+    
+    // Asignación de repartidor a envío
+    @FXML private ComboBox<String> envioAsignarCombo;
+    @FXML private ComboBox<String> repartidorAsignarCombo;
+    
     private Administrador adminActual;
     private AdminController adminController;
     private EnvioController envioController;
@@ -108,12 +129,53 @@ public class AdminDashboardViewController {
         // Configurar ComboBox de estados
         filtroEstadoEnvioCombo.getItems().addAll("TODOS", "SOLICITADO", "EN_RUTA", "ENTREGADO", "INCIDENCIA");
         filtroEstadoEnvioCombo.setValue("TODOS");
+        
+        // Configurar tabla de repartidores
+        if (repartidoresTable != null) {
+            colRepartidorId.setCellValueFactory(new PropertyValueFactory<>("idRepartidor"));
+            colRepartidorNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+            colRepartidorDocumento.setCellValueFactory(new PropertyValueFactory<>("documento"));
+            colRepartidorTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
+            colRepartidorZonaCobertura.setCellValueFactory(new PropertyValueFactory<>("zonaCobertura"));
+            colRepartidorEstado.setCellValueFactory(cellData -> 
+                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getEstado().toString())
+            );
+            colRepartidorEnvios.setCellValueFactory(new PropertyValueFactory<>("enviosAsignados"));
+            
+            // Formatear columna de estado
+            colRepartidorEstado.setCellFactory(column -> new javafx.scene.control.TableCell<Repartidor, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(item);
+                        switch (item) {
+                            case "ACTIVO" -> setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                            case "EN_RUTA" -> setStyle("-fx-text-fill: blue; -fx-font-weight: bold;");
+                            case "INACTIVO" -> setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                            default -> setStyle("");
+                        }
+                    }
+                }
+            });
+            
+            // Configurar ComboBox de estados
+            if (estadoRepartidorCombo != null) {
+                estadoRepartidorCombo.setItems(FXCollections.observableArrayList("ACTIVO", "INACTIVO", "EN_RUTA"));
+                estadoRepartidorCombo.setValue("ACTIVO");
+            }
+        }
     }
     
     private void cargarDatos() {
         cargarMetricas();
         cargarUsuarios();
         cargarEnvios();
+        cargarRepartidores();
+        actualizarCombosAsignacion();
     }
     
     private void cargarMetricas() {
@@ -485,5 +547,227 @@ public class AdminDashboardViewController {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+    
+    // ===== GESTIÓN DE REPARTIDORES =====
+    
+    @FXML
+    void handleAgregarRepartidor(ActionEvent event) {
+        try {
+            String nombre = nombreRepartidorField.getText().trim();
+            String documento = documentoRepartidorField.getText().trim();
+            String telefono = telefonoRepartidorField.getText().trim();
+            String zonaCobertura = zonaCoberturaRepartidorField.getText().trim();
+            String estadoStr = estadoRepartidorCombo.getValue();
+            
+            if (nombre.isEmpty() || documento.isEmpty() || telefono.isEmpty() || zonaCobertura.isEmpty() || estadoStr == null) {
+                mostrarAlerta(Alert.AlertType.WARNING, "Campos Vacíos", "Todos los campos son obligatorios");
+                return;
+            }
+            
+            Repartidor.EstadoRepartidor estado = Repartidor.EstadoRepartidor.valueOf(estadoStr);
+            adminController.registrarRepartidor(nombre, documento, telefono, zonaCobertura, estado);
+            limpiarFormularioRepartidor();
+            cargarRepartidores();
+            actualizarCombosAsignacion();
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "Repartidor agregado correctamente");
+        } catch (Exception e) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "Error al agregar repartidor: " + e.getMessage());
+        }
+    }
+    
+    @FXML
+    void handleActualizarRepartidor(ActionEvent event) {
+        Repartidor seleccionado = repartidoresTable.getSelectionModel().getSelectedItem();
+        if (seleccionado == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Sin Selección", "Seleccione un repartidor para actualizar");
+            return;
+        }
+        
+        try {
+            String nombre = nombreRepartidorField.getText().trim();
+            String documento = documentoRepartidorField.getText().trim();
+            String telefono = telefonoRepartidorField.getText().trim();
+            String zonaCobertura = zonaCoberturaRepartidorField.getText().trim();
+            String estadoStr = estadoRepartidorCombo.getValue();
+            
+            if (nombre.isEmpty() || documento.isEmpty() || telefono.isEmpty() || zonaCobertura.isEmpty() || estadoStr == null) {
+                mostrarAlerta(Alert.AlertType.WARNING, "Campos Vacíos", "Todos los campos son obligatorios");
+                return;
+            }
+            
+            Repartidor.EstadoRepartidor estado = Repartidor.EstadoRepartidor.valueOf(estadoStr);
+            adminController.actualizarRepartidor(seleccionado.getIdRepartidor(), nombre, documento, telefono, zonaCobertura, estado);
+            limpiarFormularioRepartidor();
+            cargarRepartidores();
+            actualizarCombosAsignacion();
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "Repartidor actualizado correctamente");
+        } catch (Exception e) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "Error al actualizar repartidor: " + e.getMessage());
+        }
+    }
+    
+    @FXML
+    void handleEliminarRepartidor(ActionEvent event) {
+        Repartidor seleccionado = repartidoresTable.getSelectionModel().getSelectedItem();
+        if (seleccionado == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Sin Selección", "Seleccione un repartidor para eliminar");
+            return;
+        }
+        
+        if (seleccionado.getEnviosAsignados() > 0) {
+            mostrarAlerta(Alert.AlertType.ERROR, "No se puede eliminar", 
+                    "El repartidor tiene " + seleccionado.getEnviosAsignados() + " envío(s) asignado(s)");
+            return;
+        }
+        
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Confirmar Eliminación");
+        confirmacion.setHeaderText("¿Eliminar repartidor?");
+        confirmacion.setContentText("¿Está seguro de eliminar a " + seleccionado.getNombre() + "?");
+        
+        Optional<ButtonType> resultado = confirmacion.showAndWait();
+        if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+            try {
+                adminController.eliminarRepartidor(seleccionado.getIdRepartidor());
+                limpiarFormularioRepartidor();
+                cargarRepartidores();
+                actualizarCombosAsignacion();
+                mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "Repartidor eliminado correctamente");
+            } catch (Exception e) {
+                mostrarAlerta(Alert.AlertType.ERROR, "Error", "Error al eliminar repartidor: " + e.getMessage());
+            }
+        }
+    }
+    
+    @FXML
+    void handleSeleccionarRepartidor() {
+        Repartidor seleccionado = repartidoresTable.getSelectionModel().getSelectedItem();
+        if (seleccionado != null) {
+            nombreRepartidorField.setText(seleccionado.getNombre());
+            documentoRepartidorField.setText(seleccionado.getDocumento());
+            telefonoRepartidorField.setText(seleccionado.getTelefono());
+            zonaCoberturaRepartidorField.setText(seleccionado.getZonaCobertura());
+            estadoRepartidorCombo.setValue(seleccionado.getEstado().toString());
+        }
+    }
+    
+    @FXML
+    void handleVerEnviosRepartidor(ActionEvent event) {
+        Repartidor seleccionado = repartidoresTable.getSelectionModel().getSelectedItem();
+        if (seleccionado == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Sin Selección", 
+                    "Por favor seleccione un repartidor de la tabla");
+            return;
+        }
+        
+        // Obtener todos los envíos asignados al repartidor
+        List<Envio> enviosDelRepartidor = adminController.obtenerTodosEnvios().stream()
+                .filter(e -> e.getRepartidor() != null && 
+                            e.getRepartidor().getIdRepartidor().equals(seleccionado.getIdRepartidor()))
+                .collect(Collectors.toList());
+        
+        if (enviosDelRepartidor.isEmpty()) {
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Sin Envíos", 
+                    "El repartidor " + seleccionado.getNombre() + " no tiene envíos asignados");
+            return;
+        }
+        
+        // Construir lista de envíos
+        StringBuilder contenido = new StringBuilder();
+        contenido.append(String.format("Total de envíos asignados: %d\n", enviosDelRepartidor.size()));
+        contenido.append("═══════════════════════════════════════════\n\n");
+        
+        for (int i = 0; i < enviosDelRepartidor.size(); i++) {
+            Envio envio = enviosDelRepartidor.get(i);
+            contenido.append(String.format("【 ENVÍO %d 】\n", i + 1));
+            contenido.append(String.format("ID: %s\n", envio.getIdEnvio()));
+            contenido.append(String.format("Estado: %s\n", envio.getEstado()));
+            contenido.append(String.format("Tipo: %s\n", envio.getTipoEnvio()));
+            contenido.append(String.format("Origen: %s\n", envio.getOrigen().getCiudad()));
+            contenido.append(String.format("Destino: %s\n", envio.getDestino().getCiudad()));
+            contenido.append(String.format("Peso: %.2f kg\n", envio.getPeso()));
+            contenido.append(String.format("Costo: $%.0f\n", envio.getCosto()));
+            contenido.append(String.format("Destinatario: %s\n", envio.getNombreDestinatario()));
+            contenido.append(String.format("Teléfono: %s\n", envio.getTelefonoDestinatario()));
+            if (i < enviosDelRepartidor.size() - 1) {
+                contenido.append("\n───────────────────────────────────────────\n\n");
+            }
+        }
+        
+        // Crear TextArea con scroll
+        TextArea textArea = new TextArea(contenido.toString());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        textArea.setPrefSize(550, 400);
+        textArea.setStyle("-fx-font-family: 'Consolas', 'Courier New', monospace; -fx-font-size: 12px;");
+        
+        // Crear ventana emergente con el TextArea
+        Alert ventanaEnvios = new Alert(Alert.AlertType.INFORMATION);
+        ventanaEnvios.setTitle("Envíos del Repartidor");
+        ventanaEnvios.setHeaderText("Envíos asignados a: " + seleccionado.getNombre());
+        ventanaEnvios.getDialogPane().setContent(textArea);
+        ventanaEnvios.getDialogPane().setPrefSize(600, 500);
+        ventanaEnvios.setResizable(true);
+        ventanaEnvios.showAndWait();
+    }
+    
+    @FXML
+    void handleAsignarRepartidor(ActionEvent event) {
+        String idEnvio = envioAsignarCombo.getValue();
+        String repartidorSeleccionado = repartidorAsignarCombo.getValue();
+        
+        if (idEnvio == null || repartidorSeleccionado == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Selección Incompleta", 
+                    "Seleccione un envío y un repartidor");
+            return;
+        }
+        
+        try {
+            // Extraer ID del repartidor (formato: "Nombre - ID")
+            String idRepartidor = repartidorSeleccionado.split(" - ")[1];
+            adminController.asignarRepartidorAEnvio(idEnvio, idRepartidor);
+            cargarEnvios();
+            cargarRepartidores();
+            actualizarCombosAsignacion();
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "Repartidor asignado al envío correctamente");
+        } catch (Exception e) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "Error al asignar repartidor: " + e.getMessage());
+        }
+    }
+    
+    private void cargarRepartidores() {
+        if (repartidoresTable != null) {
+            List<Repartidor> repartidores = adminController.obtenerTodosRepartidores();
+            repartidoresTable.setItems(FXCollections.observableArrayList(repartidores));
+        }
+    }
+    
+    private void limpiarFormularioRepartidor() {
+        if (nombreRepartidorField != null) nombreRepartidorField.clear();
+        if (documentoRepartidorField != null) documentoRepartidorField.clear();
+        if (telefonoRepartidorField != null) telefonoRepartidorField.clear();
+        if (zonaCoberturaRepartidorField != null) zonaCoberturaRepartidorField.clear();
+        if (estadoRepartidorCombo != null) estadoRepartidorCombo.setValue("ACTIVO");
+    }
+    
+    private void actualizarCombosAsignacion() {
+        if (envioAsignarCombo != null) {
+            List<Envio> enviosSinRepartidor = adminController.obtenerTodosEnvios().stream()
+                    .filter(e -> e.getRepartidor() == null || e.getEstado() == Envio.EstadoEnvio.SOLICITADO)
+                    .toList();
+            envioAsignarCombo.setItems(FXCollections.observableArrayList(
+                    enviosSinRepartidor.stream().map(Envio::getIdEnvio).toList()
+            ));
+        }
+        
+        if (repartidorAsignarCombo != null) {
+            List<Repartidor> repartidores = adminController.obtenerTodosRepartidores();
+            repartidorAsignarCombo.setItems(FXCollections.observableArrayList(
+                    repartidores.stream()
+                            .map(r -> r.getNombre() + " - " + r.getIdRepartidor())
+                            .toList()
+            ));
+        }
     }
 }

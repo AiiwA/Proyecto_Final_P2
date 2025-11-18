@@ -24,7 +24,7 @@
     </padding>
     
     <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10;">
-        <Label fx:id="welcomeLabel" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Bienvenido Administrador" />
+        <Label fx:id="welcomeLabel" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Bienvenido, " />
         <Region HBox.hgrow="ALWAYS" />
         <Button onAction="#handleActualizar" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20;" text="Actualizar Datos" />
         <Button onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20;" text="Cerrar Sesion" />
@@ -116,6 +116,105 @@
                     </columns>
                 </TableView>
             </VBox>
+        </Tab>
+        
+        <Tab text="Gestion de Repartidores">
+            <ScrollPane fitToHeight="true" fitToWidth="true">
+                <VBox spacing="10" style="-fx-padding: 15;">
+                    
+                    <!-- Formulario y Tabla en la misma fila -->
+                    <HBox spacing="15">
+                        <!-- Formulario compacto -->
+                        <VBox spacing="8" style="-fx-background-color: #ecf0f1; -fx-padding: 15; -fx-background-radius: 10; -fx-min-width: 280; -fx-max-width: 280;">
+                            <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Datos del Repartidor" />
+                            
+                            <GridPane hgap="5" vgap="8">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="100" />
+                                </columnConstraints>
+                                
+                                <VBox spacing="3" GridPane.rowIndex="0">
+                                    <Label style="-fx-font-size: 11px;" text="Nombre Completo:" />
+                                    <TextField fx:id="nombreRepartidorField" promptText="Nombre" style="-fx-font-size: 12px;" />
+                                </VBox>
+                                
+                                <VBox spacing="3" GridPane.rowIndex="1">
+                                    <Label style="-fx-font-size: 11px;" text="Documento:" />
+                                    <TextField fx:id="documentoRepartidorField" promptText="Documento" style="-fx-font-size: 12px;" />
+                                </VBox>
+                                
+                                <VBox spacing="3" GridPane.rowIndex="2">
+                                    <Label style="-fx-font-size: 11px;" text="Teléfono:" />
+                                    <TextField fx:id="telefonoRepartidorField" promptText="Teléfono" style="-fx-font-size: 12px;" />
+                                </VBox>
+                                
+                                <VBox spacing="3" GridPane.rowIndex="3">
+                                    <Label style="-fx-font-size: 11px;" text="Zona de Cobertura:" />
+                                    <TextField fx:id="zonaCoberturaRepartidorField" promptText="Zona" style="-fx-font-size: 12px;" />
+                                </VBox>
+                                
+                                <VBox spacing="3" GridPane.rowIndex="4">
+                                    <Label style="-fx-font-size: 11px;" text="Estado:" />
+                                    <ComboBox fx:id="estadoRepartidorCombo" maxWidth="Infinity" promptText="Seleccione" style="-fx-font-size: 12px;" />
+                                </VBox>
+                        <rowConstraints>
+                           <RowConstraints />
+                           <RowConstraints />
+                           <RowConstraints />
+                           <RowConstraints />
+                           <RowConstraints />
+                        </rowConstraints>
+                            </GridPane>
+                            
+                            <HBox spacing="5">
+                                <Button maxWidth="Infinity" onAction="#handleAgregarRepartidor" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 11px; -fx-padding: 8;" text="Agregar" HBox.hgrow="ALWAYS" />
+                                <Button maxWidth="Infinity" onAction="#handleActualizarRepartidor" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-size: 11px; -fx-padding: 8;" text="Actualizar" HBox.hgrow="ALWAYS" />
+                            </HBox>
+                            
+                            <Button maxWidth="Infinity" onAction="#handleEliminarRepartidor" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 11px; -fx-padding: 8;" text="Eliminar" />
+                        </VBox>
+                        
+                        <!-- Tabla optimizada -->
+                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Lista de Repartidores" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Button onAction="#handleVerEnviosRepartidor" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-size: 11px; -fx-padding: 8 15;" text="Ver Envíos" />
+                            </HBox>
+                            <TableView fx:id="repartidoresTable" onMouseClicked="#handleSeleccionarRepartidor" prefHeight="320" VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <TableColumn fx:id="colRepartidorId" prefWidth="90" text="ID" />
+                                    <TableColumn fx:id="colRepartidorNombre" prefWidth="140" text="Nombre" />
+                                    <TableColumn fx:id="colRepartidorDocumento" prefWidth="100" text="Documento" />
+                                    <TableColumn fx:id="colRepartidorTelefono" prefWidth="100" text="Teléfono" />
+                                    <TableColumn fx:id="colRepartidorZonaCobertura" prefWidth="130" text="Zona" />
+                                    <TableColumn fx:id="colRepartidorEstado" prefWidth="85" text="Estado" />
+                                    <TableColumn fx:id="colRepartidorEnvios" prefWidth="65" text="Envíos" />
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </HBox>
+                    
+                    <!-- Sección de asignación compacta -->
+                    <VBox spacing="10" style="-fx-background-color: #ecf0f1; -fx-padding: 15; -fx-background-radius: 10;">
+                        <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Asignar Repartidor a Envío" />
+                        
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <VBox spacing="3">
+                                <Label style="-fx-font-size: 11px;" text="Envío:" />
+                                <ComboBox fx:id="envioAsignarCombo" prefWidth="180" promptText="Seleccione envío" style="-fx-font-size: 12px;" />
+                            </VBox>
+                            
+                            <VBox spacing="3">
+                                <Label style="-fx-font-size: 11px;" text="Repartidor:" />
+                                <ComboBox fx:id="repartidorAsignarCombo" prefWidth="220" promptText="Seleccione repartidor" style="-fx-font-size: 12px;" />
+                            </VBox>
+                            
+                            <Button onAction="#handleAsignarRepartidor" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 8 20; -fx-font-size: 12px;" text="Asignar" />
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
         </Tab>
         
         <Tab text="Reportes y Notificaciones">

@@ -188,4 +188,50 @@ public class AdminController {
         EnvioController envioController = new EnvioController();
         return envioController.eliminarEnvio(idEnvio);
     }
+    
+    // Métodos de gestión de repartidores
+    public List<Repartidor> obtenerTodosRepartidores() {
+        return sistema.getRepartidores();
+    }
+    
+    public Repartidor registrarRepartidor(String nombre, String documento, String telefono, 
+                                         String zonaCobertura, Repartidor.EstadoRepartidor estado) {
+        RepartidorController repartidorController = new RepartidorController();
+        return repartidorController.registrarRepartidor(nombre, documento, telefono, zonaCobertura, estado);
+    }
+    
+    public void eliminarRepartidor(String idRepartidor) {
+        RepartidorController repartidorController = new RepartidorController();
+        repartidorController.eliminarRepartidor(idRepartidor);
+    }
+    
+    public void actualizarRepartidor(String idRepartidor, String nombre, String documento, 
+                                     String telefono, String zonaCobertura, Repartidor.EstadoRepartidor estado) {
+        RepartidorController repartidorController = new RepartidorController();
+        repartidorController.actualizarRepartidor(idRepartidor, nombre, documento, telefono, zonaCobertura, estado);
+    }
+    
+    public void asignarRepartidorAEnvio(String idEnvio, String idRepartidor) {
+        Envio envio = sistema.buscarEnvioPorId(idEnvio);
+        Repartidor repartidor = sistema.buscarRepartidorPorId(idRepartidor);
+        
+        if (envio != null && repartidor != null) {
+            // Remover del repartidor anterior si existe
+            if (envio.getRepartidor() != null) {
+                envio.getRepartidor().decrementarEnviosAsignados();
+            }
+            
+            // Asignar nuevo repartidor
+            envio.setRepartidor(repartidor);
+            repartidor.incrementarEnviosAsignados();
+            
+            // Actualizar estado del envío si está en SOLICITADO
+            if (envio.getEstado() == Envio.EstadoEnvio.SOLICITADO) {
+                envio.setEstado(Envio.EstadoEnvio.ASIGNADO);
+            }
+            
+            sistema.actualizarEnvio(envio);
+            System.out.println("✓ Repartidor asignado al envío");
+        }
+    }
 }

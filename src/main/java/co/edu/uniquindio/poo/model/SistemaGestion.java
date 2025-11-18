@@ -11,6 +11,7 @@ public class SistemaGestion {
     private List<Pago> pagos;
     private List<Incidencia> incidencias;
     private List<Administrador> administradores;
+    private List<Repartidor> repartidores;
     
     private SistemaGestion() {
         this.usuarios = new ArrayList<>();
@@ -18,6 +19,7 @@ public class SistemaGestion {
         this.pagos = new ArrayList<>();
         this.incidencias = new ArrayList<>();
         this.administradores = new ArrayList<>();
+        this.repartidores = new ArrayList<>();
         inicializarDatosPrueba();
     }
     
@@ -52,8 +54,47 @@ public class SistemaGestion {
         
         administradores.add(admin);
         
+        // Crear repartidores de prueba
+        crearRepartidoresPrueba();
+        
         // Crear envíos de prueba
         crearEnviosPrueba(usuario1);
+    }
+    
+    private void crearRepartidoresPrueba() {
+        Repartidor rep1 = Repartidor.builder()
+                .idRepartidor("REP-00000001")
+                .nombre("Carlos Ramírez")
+                .documento("1234567890")
+                .telefono("3101234567")
+                .zonaCobertura("Armenia Centro")
+                .estado(Repartidor.EstadoRepartidor.ACTIVO)
+                .enviosAsignados(0)
+                .build();
+        
+        Repartidor rep2 = Repartidor.builder()
+                .idRepartidor("REP-00000002")
+                .nombre("Laura Martínez")
+                .documento("0987654321")
+                .telefono("3159876543")
+                .zonaCobertura("Calarcá")
+                .estado(Repartidor.EstadoRepartidor.ACTIVO)
+                .enviosAsignados(0)
+                .build();
+        
+        Repartidor rep3 = Repartidor.builder()
+                .idRepartidor("REP-00000003")
+                .nombre("Diego Silva")
+                .documento("1122334455")
+                .telefono("3201237890")
+                .zonaCobertura("Armenia Norte")
+                .estado(Repartidor.EstadoRepartidor.INACTIVO)
+                .enviosAsignados(0)
+                .build();
+        
+        repartidores.add(rep1);
+        repartidores.add(rep2);
+        repartidores.add(rep3);
     }
     
     private void crearEnviosPrueba(Usuario usuario) {
@@ -184,6 +225,28 @@ public class SistemaGestion {
         administradores.add(admin);
     }
     
+    public void registrarRepartidor(Repartidor repartidor) {
+        repartidores.add(repartidor);
+    }
+    
+    public void eliminarRepartidor(String idRepartidor) {
+        repartidores.removeIf(r -> r.getIdRepartidor().equals(idRepartidor));
+    }
+    
+    public Repartidor buscarRepartidorPorId(String idRepartidor) {
+        return repartidores.stream()
+                .filter(r -> r.getIdRepartidor().equals(idRepartidor))
+                .findFirst()
+                .orElse(null);
+    }
+    
+    public Envio buscarEnvioPorId(String idEnvio) {
+        return envios.stream()
+                .filter(e -> e.getIdEnvio().equals(idEnvio))
+                .findFirst()
+                .orElse(null);
+    }
+    
     // Getters
     public List<Usuario> getUsuarios() {
         return usuarios;
@@ -203,6 +266,10 @@ public class SistemaGestion {
     
     public List<Administrador> getAdministradores() {
         return administradores;
+    }
+    
+    public List<Repartidor> getRepartidores() {
+        return repartidores;
     }
     
     public void actualizarEnvio(Envio envio) {
