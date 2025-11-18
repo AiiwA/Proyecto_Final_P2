@@ -46,33 +46,16 @@
 - **Clase**: `SistemaGestion`
 - **Propósito**: Garantizar una única instancia del sistema de gestión central
 - **Uso**: Control centralizado de usuarios, envíos, repartidores y datos del sistema
-```java
-SistemaGestion sistema = SistemaGestion.obtenerInstancia();
-```
 
 #### 2. **Factory Method**
 - **Clases**: `EntidadFactory`, `EnvioFactory`
 - **Propósito**: Creación de objetos complejos sin exponer la lógica de construcción
 - **Uso**: Crear envíos de diferentes tipos y entidades del sistema
-```java
-Envio envio = EnvioFactory.crearEnvioExpress(usuario, origen, destino, peso);
-Direccion direccion = EntidadFactory.crearDireccion("Casa", "Calle 50", "Armenia", lat, lon);
-```
 
 #### 3. **Builder**
 - **Clases**: `Direccion`, `Envio`, `Pago`, `Tarifa`, `Incidencia`, `Repartidor`
 - **Propósito**: Construcción flexible de objetos complejos con múltiples parámetros
 - **Uso**: Facilitar la creación de objetos con muchos atributos opcionales
-```java
-Repartidor rep = Repartidor.builder()
-    .idRepartidor("REP-001")
-    .nombre("Carlos Ramírez")
-    .documento("1234567890")
-    .telefono("3101234567")
-    .zonaCobertura("Armenia Centro")
-    .estado(EstadoRepartidor.ACTIVO)
-    .build();
-```
 
 ### 🔌 Patrones Estructurales (3)
 
@@ -80,33 +63,16 @@ Repartidor rep = Repartidor.builder()
 - **Clases**: `ServicioEnvio`, `ServicioEnvioBase`, `ServicioEnvioDecorator`, `ServicioSeguro`
 - **Propósito**: Agregar funcionalidades adicionales a envíos de forma dinámica
 - **Uso**: Añadir seguro, prioridad o características especiales a envíos
-```java
-ServicioEnvio envio = new ServicioEnvioBase(envioBase);
-envio = new ServicioSeguro(envio, valorSeguro);
-double costoTotal = envio.calcularCosto();
-```
 
 #### 5. **Adapter**
 - **Clases**: `EmailAdapter`, `SMSAdapter`, `MapasAdapter`
 - **Propósito**: Integrar servicios externos con interfaces incompatibles
 - **Uso**: Notificaciones por email/SMS y cálculo de distancias
-```java
-ServicioNotificacion emailAdapter = new EmailAdapter(servicioEmailExterno);
-emailAdapter.enviarNotificacion("usuario@email.com", "Envío en camino");
-
-ServicioDistancia mapasAdapter = new MapasAdapter(servicioMapasExterno);
-double distancia = mapasAdapter.calcularDistancia(origen, destino);
-```
 
 #### 6. **Bridge**
 - **Clases**: `Reporte`, `FormatoReporte`, `FormatoCSV`, `FormatoPDF`, `ReporteEnvios`, `ReporteUsuarios`
 - **Propósito**: Separar abstracción (tipo de reporte) de implementación (formato)
 - **Uso**: Generar diferentes tipos de reportes en múltiples formatos
-```java
-FormatoReporte formato = new FormatoPDF();
-Reporte reporte = new ReporteEnvios(formato, listaEnvios);
-reporte.generar("reporte_envios_mensual");
-```
 
 ### 🎬 Patrones Comportamentales (4)
 
@@ -114,156 +80,21 @@ reporte.generar("reporte_envios_mensual");
 - **Clases**: `EstrategiaPago`, `PagoTarjeta`, `PagoNequi`, `PagoPayPal`, `PagoEfectivo`
 - **Propósito**: Definir familia de algoritmos intercambiables para procesamiento de pagos
 - **Uso**: Procesar pagos con diferentes métodos de pago
-```java
-// Cambiar estrategia de pago dinámicamente
-EstrategiaPago estrategia = new PagoTarjeta("4532-****-****-1234", "Juan Pérez");
-Pago pago = estrategia.procesarPago(envio);
-```
 
 #### 8. **Observer**
 - **Clases**: `Observer`, `Subject`, `NotificadorUsuario`, `NotificadorRepartidor`, `AdminDashboardObserver`
 - **Propósito**: Notificar automáticamente a observadores cuando cambia el estado
 - **Uso**: Actualizar UI y enviar notificaciones cuando un envío cambia de estado
-```java
-envio.agregarObservador(new NotificadorUsuario(usuario));
-envio.agregarObservador(new NotificadorRepartidor(repartidor));
-envio.cambiarEstado(EstadoEnvio.EN_RUTA); // Notifica a todos los observadores
-```
 
 #### 9. **Command**
 - **Clases**: `Command`, `GestorComandos`, `AsignarRepartidorCommand`, `CancelarEnvioCommand`, `ActualizarEstadoCommand`
 - **Propósito**: Encapsular operaciones como objetos, permitiendo deshacer/rehacer
 - **Uso**: Historial de operaciones reversibles
-```java
-Command comando = new AsignarRepartidorCommand(envio, repartidor);
-gestorComandos.ejecutarComando(comando);
-// Deshacer si es necesario
-gestorComandos.deshacerUltimoComando();
-```
 
 #### 10. **State**
 - **Clases**: `EstadoEnvio`, `EstadoSolicitado`, `EstadoAsignado`, `EstadoEnRuta`, `EstadoEntregado`, `EstadoIncidencia`
 - **Propósito**: Cambiar comportamiento del envío según su estado actual
 - **Uso**: Gestionar transiciones válidas entre estados de envío
-```java
-envio.asignarRepartidor();  // EstadoSolicitado -> EstadoAsignado
-envio.iniciarEntrega();      // EstadoAsignado -> EstadoEnRuta
-envio.marcarEntregado();     // EstadoEnRuta -> EstadoEntregado
-```
-
----
-
-## 📁 Estructura Detallada del Proyecto
-
-```
-Proyecto_Final_P2/
-│
-├── src/main/java/co/edu/uniquindio/poo/
-│   │
-│   ├── 📦 adapter/                    # Patrón Adapter - Integración servicios externos
-│   │   ├── ServicioNotificacion.java          # Interfaz para notificaciones
-│   │   ├── EmailAdapter.java                  # Adaptador para email
-│   │   ├── SMSAdapter.java                    # Adaptador para SMS
-│   │   ├── ServicioEmailExterno.java          # Servicio externo de email
-│   │   ├── ServicioSMSExterno.java            # Servicio externo de SMS
-│   │   ├── ServicioDistancia.java             # Interfaz para distancias
-│   │   ├── MapasAdapter.java                  # Adaptador para mapas
-│   │   └── ServicioMapasExterno.java          # Servicio externo de mapas
-│   │
-│   ├── 📦 bridge/                     # Patrón Bridge - Reportes y formatos
-│   │   ├── Reporte.java                       # Abstracción de reporte
-│   │   ├── FormatoReporte.java                # Implementación de formato
-│   │   ├── FormatoCSV.java                    # Formato CSV
-│   │   ├── FormatoPDF.java                    # Formato PDF (Apache PDFBox)
-│   │   ├── ReporteEnvios.java                 # Reporte de envíos
-│   │   └── ReporteUsuarios.java               # Reporte de usuarios
-│   │
-│   ├── 📦 command/                    # Patrón Command - Operaciones reversibles
-│   │   ├── Command.java                       # Interfaz Command
-│   │   ├── GestorComandos.java                # Gestor de comandos (Invoker)
-│   │   ├── AsignarRepartidorCommand.java      # Comando asignar repartidor
-│   │   ├── CancelarEnvioCommand.java          # Comando cancelar envío
-│   │   └── ActualizarEstadoCommand.java       # Comando actualizar estado
-│   │
-│   ├── 📦 controller/                 # Lógica de Negocio (Business Logic)
-│   │   ├── UsuarioController.java             # CRUD y lógica de usuarios
-│   │   ├── EnvioController.java               # Gestión de envíos
-│   │   ├── RepartidorController.java          # Gestión de repartidores
-│   │   ├── AdminController.java               # Operaciones administrativas
-│   │   └── PagoController.java                # Procesamiento de pagos
-│   │
-│   ├── 📦 decorator/                  # Patrón Decorator - Servicios adicionales
-│   │   ├── ServicioEnvio.java                 # Interfaz Component
-│   │   ├── ServicioEnvioBase.java             # Concrete Component
-│   │   ├── ServicioEnvioDecorator.java        # Decorator abstracto
-│   │   └── ServicioSeguro.java                # Concrete Decorator (seguro)
-│   │
-│   ├── 📦 factory/                    # Patrón Factory - Creación de objetos
-│   │   ├── EntidadFactory.java                # Factory de entidades generales
-│   │   └── EnvioFactory.java                  # Factory de envíos específicos
-│   │
-│   ├── 📦 model/                      # Modelos de Dominio (Domain Models)
-│   │   ├── Administrador.java                 # Entidad Administrador (Builder)
-│   │   ├── Direccion.java                     # Entidad Dirección (Builder)
-│   │   ├── Envio.java                         # Entidad Envío (Builder + Observer)
-│   │   ├── Incidencia.java                    # Entidad Incidencia (Builder)
-│   │   ├── MetodoPago.java                    # Entidad Método de Pago (Builder)
-│   │   ├── Pago.java                          # Entidad Pago (Builder)
-│   │   ├── Repartidor.java                    # Entidad Repartidor (Builder)
-│   │   ├── SistemaGestion.java                # Singleton - Sistema central
-│   │   ├── Tarifa.java                        # Entidad Tarifa (Builder)
-│   │   └── Usuario.java                       # Entidad Usuario (Builder)
-│   │
-│   ├── 📦 observer/                   # Patrón Observer - Notificaciones
-│   │   ├── Observer.java                      # Interfaz Observer
-│   │   ├── Subject.java                       # Interfaz Subject
-│   │   ├── NotificadorUsuario.java            # Observer para usuarios
-│   │   ├── NotificadorRepartidor.java         # Observer para repartidores
-│   │   └── AdminDashboardObserver.java        # Observer para dashboard admin
-│   │
-│   ├── 📦 state/                      # Patrón State - Estados de envío
-│   │   ├── EstadoEnvio.java                   # Interfaz State
-│   │   ├── EstadoSolicitado.java              # Estado Solicitado
-│   │   ├── EstadoAsignado.java                # Estado Asignado
-│   │   ├── EstadoEnRuta.java                  # Estado En Ruta
-│   │   ├── EstadoEntregado.java               # Estado Entregado
-│   │   └── EstadoIncidencia.java              # Estado Incidencia
-│   │
-│   ├── 📦 strategy/                   # Patrón Strategy - Métodos de pago
-│   │   ├── EstrategiaPago.java                # Interfaz Strategy
-│   │   ├── PagoTarjeta.java                   # Pago con tarjeta
-│   │   ├── PagoNequi.java                     # Pago con Nequi
-│   │   ├── PagoPayPal.java                    # Pago con PayPal
-│   │   └── PagoEfectivo.java                  # Pago en efectivo
-│   │
-│   ├── 📦 utils/                      # Utilidades del Sistema
-│   │   └── DataInitializer.java               # Inicialización datos de prueba
-│   │
-│   ├── 📦 viewController/             # Controladores de Vista (UI Controllers)
-│   │   ├── NavigationController.java          # Navegación entre vistas
-│   │   ├── SessionManager.java                # Gestión de sesión de usuario
-│   │   ├── LoginViewController.java           # Controlador login
-│   │   ├── RegisterViewController.java        # Controlador registro
-│   │   ├── UserDashboardViewController.java   # Dashboard de usuario
-│   │   ├── AdminDashboardViewController.java  # Dashboard de administrador
-│   │   ├── NuevoEnvioViewController.java      # Crear nuevo envío
-│   │   └── MapaSelectorViewController.java    # Selector de ubicaciones
-│   │
-│   ├── module-info.java               # Configuración módulo Java 9+
-│   └── HelloApplication.java          # Clase principal de la aplicación
-│
-├── src/main/resources/co/edu/uniquindio/demop2pf/
-│   ├── login-view.fxml                # Vista de login
-│   ├── register-view.fxml             # Vista de registro
-│   ├── user-dashboard.fxml            # Dashboard usuario
-│   ├── admin-dashboard.fxml           # Dashboard administrador
-│   ├── nuevo-envio.fxml               # Formulario nuevo envío
-│   └── mapa-selector.fxml             # Selector de mapa
-│
-├── pom.xml                            # Configuración Maven
-├── LICENSE                            # Licencia del proyecto
-└── README.md                          # Este archivo
-```
 
 ---
 
@@ -424,56 +255,6 @@ Proyecto_Final_P2/
 | **Apache PDFBox** | 2.0.29 | Generación de reportes PDF |
 | **JUnit 5** | 5.10.2 | Testing unitario |
 
-### Dependencias Maven
-
-```xml
-<dependencies>
-    <!-- JavaFX Core -->
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-controls</artifactId>
-        <version>17.0.6</version>
-    </dependency>
-    
-    <!-- JavaFX FXML -->
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-fxml</artifactId>
-        <version>17.0.6</version>
-    </dependency>
-    
-    <!-- JavaFX Web (para mapas) -->
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-web</artifactId>
-        <version>17.0.6</version>
-    </dependency>
-    
-    <!-- Lombok -->
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>1.18.34</version>
-        <scope>provided</scope>
-    </dependency>
-    
-    <!-- Apache PDFBox -->
-    <dependency>
-        <groupId>org.apache.pdfbox</groupId>
-        <artifactId>pdfbox</artifactId>
-        <version>2.0.29</version>
-    </dependency>
-    
-    <!-- JUnit 5 -->
-    <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-api</artifactId>
-        <version>5.10.2</version>
-        <scope>test</scope>
-    </dependency>
-</dependencies>
-```
-
 ---
 
 ## 📦 Instalación y Ejecución
@@ -555,75 +336,26 @@ set JAVA_HOME=C:\Program Files\Java\jdk-17
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 ```
 
-#### Error: "Módulo JavaFX no encontrado"
-- Asegúrate de tener Java 17+ instalado
-- Limpia el proyecto: `mvn clean`
-- Elimina carpeta `target/` y recompila
-
-#### Error de Lombok en IDE
-- **IntelliJ IDEA**: Instalar plugin "Lombok"
-- **Eclipse**: Ejecutar `lombok.jar` como instalador
-- **VS Code**: Instalar extensión "Lombok Annotations Support"
-
 ---
 
-## 👤 Uso del Sistema
+## 🔐 Credenciales de Prueba
 
-### 🔐 Credenciales de Prueba
+**Usuario Cliente:**
+- Correo: `juan@email.com`
+- Contraseña: `123456`
 
-#### Usuario Cliente
-```
-Correo: juan@email.com
-Contraseña: 123456
-```
+**Administrador:**
+- Correo: `admin@sistema.com`
+- Contraseña: `admin123`
 
-#### Administrador
-```
-Correo: admin@sistema.com
-Contraseña: admin123
-```
+### 📊 Datos Iniciales
 
-### 📊 Datos Iniciales Pre-cargados
-
-Al iniciar la aplicación por primera vez, el sistema carga automáticamente:
-
+Al iniciar la aplicación, el sistema carga automáticamente:
 - ✅ **2 Usuarios** (Juan Pérez, María González)
-- ✅ **1 Administrador** (Administrador)
-- ✅ **3 Repartidores**:
-  - Carlos Ramírez (ACTIVO - Armenia Centro)
-  - Laura Martínez (ACTIVO - Calarcá)
-  - Diego Silva (INACTIVO - Armenia Norte)
+- ✅ **1 Administrador** 
+- ✅ **3 Repartidores** (Carlos Ramírez, Laura Martínez, Diego Silva)
 - ✅ **3 Envíos de ejemplo** en diferentes estados
 - ✅ **Direcciones de prueba** en Armenia y Calarcá
-
-### 🎯 Flujo de Trabajo Típico
-
-#### Como Usuario:
-1. **Registrarse** o **Iniciar sesión** con credenciales
-2. **Crear un nuevo envío**:
-   - Seleccionar origen y destino
-   - Ingresar datos del paquete (peso, dimensiones)
-   - Elegir tipo de envío
-   - Seleccionar método de pago
-3. **Rastrear el envío** desde el dashboard
-4. **Recibir notificaciones** de cambios de estado
-
-#### Como Administrador:
-1. **Iniciar sesión** con credenciales de admin
-2. **Ver métricas** generales del sistema
-3. **Gestionar repartidores**:
-   - Agregar nuevos repartidores
-   - Actualizar estado (ACTIVO/INACTIVO/EN_RUTA)
-   - Ver envíos asignados a cada repartidor
-4. **Asignar envíos** a repartidores disponibles
-5. **Generar reportes** CSV/PDF
-6. **Gestionar usuarios** y **envíos**
-
-#### Como Repartidor (simulado):
-1. El administrador crea el repartidor
-2. El administrador asigna envíos al repartidor
-3. Se puede ver la lista de envíos asignados
-4. El administrador actualiza el estado del repartidor
 
 ---
 
@@ -664,18 +396,18 @@ Al iniciar la aplicación por primera vez, el sistema carga automáticamente:
                          ↓↑
 ┌─────────────────────────────────────────────────────┐
 │          CAPA DE PATRONES (Patterns)                │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐          │
-│  │ Strategy │  │ Observer │  │  State   │          │
-│  │  (Pago)  │  │(Notific.)│  │ (Envío)  │          │
-│  └──────────┘  └──────────┘  └──────────┘          │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐          │
-│  │Decorator │  │ Adapter  │  │  Bridge  │          │
-│  │(Servicio)│  │(Externos)│  │(Reportes)│          │
-│  └──────────┘  └──────────┘  └──────────┘          │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐          │
-│  │ Factory  │  │ Command  │  │ Builder  │          │
-│  │(Entidad) │  │(Historial)│ │(Objetos) │          │
-│  └──────────┘  └──────────┘  └──────────┘          │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐           │
+│  │ Strategy │  │ Observer │  │  State   │           │
+│  │  (Pago)  │  │(Notific.)│  │ (Envío)  │           │
+│  └──────────┘  └──────────┘  └──────────┘           │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐           │
+│  │Decorator │  │ Adapter  │  │  Bridge  │           │
+│  │(Servicio)│  │(Externos)│  │(Reportes)│           │
+│  └──────────┘  └──────────┘  └──────────┘           │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐           │
+│  │ Factory  │  │ Command  │  │ Builder  │           │
+│  │(Entidad) │  │(Historial)│ │(Objetos) │           │
+│  └──────────┘  └──────────┘  └──────────┘           │
 └─────────────────────────────────────────────────────┘
                          ↓↑
 ┌─────────────────────────────────────────────────────┐
@@ -686,7 +418,7 @@ Al iniciar la aplicación por primera vez, el sistema carga automáticamente:
 │  │  - Envio                                      │  │
 │  │  - Repartidor                                 │  │
 │  │  - Administrador                              │  │
-│  │  - Pago, Direccion, Tarifa, etc.             │  │
+│  │  - Pago, Direccion, Tarifa, etc.              │  │
 │  └───────────────────────────────────────────────┘  │
 │  ┌───────────────────────────────────────────────┐  │
 │  │  Sistema Central (Singleton)                  │  │
@@ -720,23 +452,6 @@ Al iniciar la aplicación por primera vez, el sistema carga automáticamente:
 
 ## 📚 Documentación Adicional
 
-### 🎓 Guía de Patrones Implementados
-
-#### Cuándo usar cada patrón:
-
-| Patrón | Cuándo Usar |
-|--------|-------------|
-| **Singleton** | Necesitas una única instancia global (SistemaGestion) |
-| **Factory** | Creación compleja de objetos con lógica (Envios, Entidades) |
-| **Builder** | Objetos con muchos parámetros opcionales (Direccion, Pago) |
-| **Decorator** | Agregar funcionalidades dinámicamente (Seguro a envío) |
-| **Adapter** | Integrar servicios con interfaces incompatibles (Email, SMS) |
-| **Bridge** | Separar abstracción de implementación (Reportes/Formatos) |
-| **Strategy** | Algoritmos intercambiables (Métodos de pago) |
-| **Observer** | Notificar cambios a múltiples interesados (Estado envío) |
-| **Command** | Encapsular operaciones reversibles (Historial) |
-| **State** | Comportamiento cambia según estado (Estados de envío) |
-
 ### 📝 Convenciones de Código
 
 - **Nombres de clases**: PascalCase (`UsuarioController`)
@@ -747,35 +462,16 @@ Al iniciar la aplicación por primera vez, el sistema carga automáticamente:
 
 ### 🧪 Testing
 
-El proyecto incluye estructura para pruebas unitarias con JUnit 5:
+El proyecto incluye **23 pruebas unitarias** con JUnit 5 en 3 clases principales:
+
+- **AdminControllerTest** (8 tests): Registro de administradores, gestión de repartidores, métricas del sistema
+- **UsuarioControllerTest** (7 tests): Registro de usuarios, búsqueda, gestión de direcciones
+- **EnvioControllerTest** (8 tests): Creación de envíos (estándar/express), cálculo de costos, cambios de estado
 
 ```bash
 # Ejecutar todos los tests
 mvn test
-
-# Ejecutar con reporte de cobertura
-mvn test jacoco:report
 ```
-
----
-
-## 🤝 Contribución
-
-### 💡 Cómo Contribuir
-
-1. **Fork** el repositorio
-2. **Crea una rama** para tu feature (`git checkout -b feature/AmazingFeature`)
-3. **Commit** tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** a la rama (`git push origin feature/AmazingFeature`)
-5. **Abre un Pull Request**
-
-### 📋 Guía de Estilo
-
-- Seguir principios SOLID
-- Documentar métodos públicos con JavaDoc
-- Escribir tests para nueva funcionalidad
-- Mantener compatibilidad con Java 17
-- Usar Lombok para reducir boilerplate
 
 ---
 
@@ -834,31 +530,6 @@ copies or substantial portions of the Software.
 - [Lombok Documentation](https://projectlombok.org/)
 - [Maven Documentation](https://maven.apache.org/guides/)
 - [Design Patterns (Gang of Four)](https://refactoring.guru/design-patterns)
-
----
-
-## 📊 Estadísticas del Proyecto
-
-```
-Lenguajes:
-  Java:        85%
-  FXML:        10%
-  XML (Maven):  3%
-  Markdown:     2%
-
-Líneas de código:
-  Java:        ~8,500 líneas
-  FXML:        ~1,200 líneas
-  Total:       ~10,000 líneas
-
-Archivos:
-  Clases Java:      65 archivos
-  Vistas FXML:       6 archivos
-  Configuración:     2 archivos
-  
-Patrones:         10 implementados
-Paquetes:         11 organizados
-```
 
 ---
 
