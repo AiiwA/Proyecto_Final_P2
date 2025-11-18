@@ -318,8 +318,7 @@ Proyecto_Final_P2/
 
 ### 🚚 Panel de Repartidor
 
-#### 🔑 Acceso y Disponibilidad
-- ✅ Login con documento y contraseña
+#### 🔑 Disponibilidad
 - ✅ **Control de estado**:
   - 🟢 **ACTIVO**: Disponible para asignaciones
   - 🔴 **INACTIVO**: No disponible
