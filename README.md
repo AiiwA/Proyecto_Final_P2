@@ -759,36 +759,6 @@ mvn test jacoco:report
 
 ---
 
-## 🔜 Roadmap y Mejoras Futuras
-
-### 🎯 Próximas Características
-
-- [ ] **Dashboard completo de repartidor** con login independiente
-- [ ] **Vista de creación de envíos** mejorada con selector de mapa
-- [ ] **Gestión avanzada de direcciones** con favoritos
-- [ ] **Gestión de métodos de pago** en perfil de usuario
-- [ ] **Rastreo en tiempo real** con mapa interactivo
-- [ ] **Chat en vivo** entre usuario y repartidor
-- [ ] **Sistema de calificaciones** y reseñas
-- [ ] **Notificaciones push** en tiempo real
-- [ ] **Historial de comandos** con deshacer/rehacer
-- [ ] **Modo oscuro** en toda la aplicación
-
-### 🚀 Mejoras Técnicas
-
-- [ ] **Persistencia en base de datos** (MySQL/PostgreSQL)
-- [ ] **API REST** para backend independiente
-- [ ] **Autenticación JWT** para seguridad
-- [ ] **Integración con Google Maps API** real
-- [ ] **Integración con servicios de pago** reales (Stripe, PayPal)
-- [ ] **Integración con SMS/Email** reales (Twilio, SendGrid)
-- [ ] **Cache distribuido** con Redis
-- [ ] **Microservicios** para escalabilidad
-- [ ] **Contenedores Docker** para deployment
-- [ ] **CI/CD** con GitHub Actions
-
----
-
 ## 🤝 Contribución
 
 ### 💡 Cómo Contribuir
@@ -837,8 +807,8 @@ copies or substantial portions of the Software.
 
 | Nombre | GitHub | Rol |
 |--------|--------|-----|
-| **Brandon Gil** | [@BrandonGil](https://github.com/BrandonGil) | Full Stack Developer |
-| **Santiago Padilla** | [@AiiwA](https://github.com/AiiwA) | Full Stack Developer |
+| **Brandon Gil** | [AiiwA](https://github.com/AiiwA) | Ing. en proceso |
+| **Santiago Padilla** | [@padilla05x](https://github.com/padilla05x) | Ing. en proceso |
 
 ### 🙏 Agradecimientos
 
@@ -854,7 +824,7 @@ copies or substantial portions of the Software.
 
 ### 💬 ¿Necesitas Ayuda?
 
-- 📧 **Email**: citydrop.support@gmail.com
+- 📧 **Email**: santiago.padillar@uqvirtual.edu.co
 - 🐛 **Issues**: [GitHub Issues](https://github.com/AiiwA/Proyecto_Final_P2/issues)
 - 📖 **Wiki**: [Documentación Completa](https://github.com/AiiwA/Proyecto_Final_P2/wiki)
 
