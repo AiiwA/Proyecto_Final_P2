@@ -36,6 +36,7 @@ public class EnvioFactory {
                 .ancho(ancho)
                 .alto(alto)
                 .usuario(usuario)
+                .tipoEnvio(Envio.TipoEnvio.ESTANDAR)
                 .estado(Envio.EstadoEnvio.SOLICITADO)
                 .fechaEntregaEstimada(LocalDateTime.now().plusDays(3))
                 .build();
@@ -66,6 +67,7 @@ public class EnvioFactory {
                 .ancho(ancho)
                 .alto(alto)
                 .usuario(usuario)
+                .tipoEnvio(Envio.TipoEnvio.EXPRESS)
                 .estado(Envio.EstadoEnvio.SOLICITADO)
                 .fechaEntregaEstimada(LocalDateTime.now().plusHours(24))
                 .build();
@@ -96,6 +98,7 @@ public class EnvioFactory {
                 .ancho(ancho)
                 .alto(alto)
                 .usuario(usuario)
+                .tipoEnvio(Envio.TipoEnvio.FRAGIL)
                 .estado(Envio.EstadoEnvio.SOLICITADO)
                 .fechaEntregaEstimada(LocalDateTime.now().plusDays(2))
                 .build();
